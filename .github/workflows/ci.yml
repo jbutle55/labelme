@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - ci_fix
   pull_request:
 
 jobs:
