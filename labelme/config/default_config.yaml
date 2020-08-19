@@ -28,7 +28,7 @@ shape:
   select_line_color: [255, 255, 255, 255]
   select_fill_color: [0, 255, 0, 155]
   hvertex_fill_color: [255, 255, 255, 255]
-  point_size: 8
+  point_size: 3
 
 # main
 flag_dock:
@@ -99,3 +99,4 @@ shortcuts:
   add_point_to_edge: Ctrl+Shift+P
   edit_label: Ctrl+E
   toggle_keep_prev_mode: Ctrl+P
+  temp_disable_autolock: F # Hold F to place point withou autolocking to first point

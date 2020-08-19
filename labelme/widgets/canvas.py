@@ -74,6 +74,7 @@ class Canvas(QtWidgets.QWidget):
         self.hEdge = None
         self.prevhEdge = None
         self.movingShape = False
+        self.no_attraction = False
         self._painter = QtGui.QPainter()
         self._cursor = CURSOR_DEFAULT
         # Menus:
@@ -198,6 +199,7 @@ class Canvas(QtWidgets.QWidget):
                 len(self.current) > 1
                 and self.createMode == "polygon"
                 and self.closeEnough(pos, self.current[0])
+                and not self.no_attraction
             ):
                 # Attract line to starting point and
                 # colorise to alert the user.
@@ -718,6 +720,15 @@ class Canvas(QtWidgets.QWidget):
             self.update()
         elif key == QtCore.Qt.Key_Return and self.canCloseShape():
             self.finalise()
+        elif key == QtCore.Qt.Key_F:
+            # Hold down F key to avoid the cursor attracting to
+            # the initial polygon point
+            self.no_attraction = True
+
+    def keyReleaseEvent(self, ev):
+        key = ev.key()
+        if key == QtCore.Qt.Key_F:
+            self.no_attraction = False
 
     def setLastLabel(self, text, flags):
         assert text
