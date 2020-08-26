@@ -1035,7 +1035,9 @@ class MainWindow(QtWidgets.QMainWindow):
         if shape is None:
             return
         text, flags, group_id = self.labelDialog.popUp(
-            text=shape.label, flags=shape.flags, group_id=shape.group_id,
+            text=shape.label,
+            flags=shape.flags,
+            group_id=shape.group_id,
         )
         if text is None:
             return
@@ -1062,7 +1064,9 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def fileSearchChanged(self):
         self.importDirImages(
-            self.lastOpenDir, pattern=self.fileSearch.text(), load=False,
+            self.lastOpenDir,
+            pattern=self.fileSearch.text(),
+            load=False,
         )
 
     def fileSelectionChanged(self):
@@ -1168,7 +1172,9 @@ class MainWindow(QtWidgets.QMainWindow):
             other_data = shape["other_data"]
 
             shape = Shape(
-                label=label, shape_type=shape_type, group_id=group_id,
+                label=label,
+                shape_type=shape_type,
+                group_id=group_id,
             )
             for x, y in points:
                 shape.addPoint(QtCore.QPointF(x, y))
@@ -1361,7 +1367,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.scrollBars[Qt.Horizontal].value() + x_shift,
             )
             self.setScroll(
-                Qt.Vertical, self.scrollBars[Qt.Vertical].value() + y_shift,
+                Qt.Vertical,
+                self.scrollBars[Qt.Vertical].value() + y_shift,
             )
 
     def setFitWindow(self, value=True):
@@ -1449,7 +1456,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 return False
             self.imageData = self.labelFile.imageData
             self.imagePath = osp.join(
-                osp.dirname(label_file), self.labelFile.imagePath,
+                osp.dirname(label_file),
+                self.labelFile.imagePath,
             )
             self.otherData = self.labelFile.otherData
         else:
