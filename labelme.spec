@@ -20,6 +20,7 @@ a = Analysis(
     runtime_hooks=[],
     excludes=[],
 )
+a.binaries = a.binaries - TOC([('libpng16.16.dylib',None,None)])
 pyz = PYZ(a.pure, a.zipped_data)
 exe = EXE(
     pyz,
