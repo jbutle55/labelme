@@ -139,6 +139,6 @@ jobs:
         # Build the standalone executable
         pip install 'pyinstaller!=3.4'
         pip install 'setuptools<45.0.0'
-        pip install 'matplitlib<3.3'
+        pip install 'matplotlib<3.3'
         pyinstaller labelme.spec
         dist/labelme --version
