@@ -10,7 +10,7 @@
   <a href="https://pypi.python.org/pypi/labelme"><img src="https://img.shields.io/pypi/v/labelme.svg"></a>
   <a href="https://pypi.org/project/labelme"><img src="https://img.shields.io/pypi/pyversions/labelme.svg"></a>
   <a href="https://github.com/wkentaro/labelme/actions"><img src="https://github.com/wkentaro/labelme/workflows/ci/badge.svg?branch=master&event=push"></a>
-  <a href="https://hub.docker.com/r/wkentaro/labelme"><img src="https://img.shields.io/docker/build/wkentaro/labelme.svg"></a>
+  <a href="https://hub.docker.com/r/wkentaro/labelme"><img src="https://img.shields.io/docker/cloud/build/wkentaro/labelme"></a>
 </div>
 
 <div align="center">
@@ -57,14 +57,14 @@ It is written in Python and uses Qt for its graphical interface.
 
 - Ubuntu / macOS / Windows
 - Python2 / Python3
-- [PyQt4 / PyQt5](http://www.riverbankcomputing.co.uk/software/pyqt/intro) / [PySide2](https://wiki.qt.io/PySide2_GettingStarted)
+- [PyQt4 / PyQt5](http://www.riverbankcomputing.co.uk/software/pyqt/intro)
 
 
 ## Installation
 
 There are options:
 
-- Platform agonistic installation: [Anaconda](#anaconda), [Docker](#docker)
+- Platform agnostic installation: [Anaconda](#anaconda), [Docker](#docker)
 - Platform specific installation: [Ubuntu](#ubuntu), [macOS](#macos), [Windows](#windows)
 - Pre-build binaries from [the release section](https://github.com/wkentaro/labelme/releases)
 
@@ -232,6 +232,20 @@ pip install .
 pip install pyinstaller
 pyinstaller labelme.spec
 dist/labelme --version
+```
+
+
+## How to contribute
+
+Make sure below test passes on your environment.  
+See `.github/workflows/ci.yml` for more detail.
+
+```bash
+pip install black hacking pytest pytest-qt
+
+flake8 .
+black --line-length 79 --check labelme/
+MPLBACKEND='agg' pytest tests/ -m 'not gpu'
 ```
 
 

@@ -171,6 +171,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.canvas = self.labelList.canvas = Canvas(
             epsilon=self._config["epsilon"],
             double_click=self._config["canvas"]["double_click"],
+            num_backups=self._config["canvas"]["num_backups"],
         )
         self.canvas.zoomRequest.connect(self.zoomRequest)
 
@@ -408,7 +409,7 @@ class MainWindow(QtWidgets.QMainWindow):
         )
         removePoint = action(
             text="Remove Selected Point",
-            slot=self.canvas.removeSelectedPoint,
+            slot=self.removeSelectedPoint,
             icon="edit",
             tip="Remove selected point from polygon",
             enabled=False,
@@ -833,6 +834,9 @@ class MainWindow(QtWidgets.QMainWindow):
         utils.addActions(self.menus.edit, actions + self.actions.editMenu)
 
     def setDirty(self):
+        # Even if we autosave the file, we keep the ability to undo
+        self.actions.undo.setEnabled(self.canvas.isShapeRestorable)
+
         if self._config["auto_save"] or self.actions.saveAuto.isChecked():
             label_file = osp.splitext(self.imagePath)[0] + ".json"
             if self.output_dir:
@@ -842,7 +846,6 @@ class MainWindow(QtWidgets.QMainWindow):
             return
         self.dirty = True
         self.actions.save.setEnabled(True)
-        self.actions.undo.setEnabled(self.canvas.isShapeRestorable)
         title = __appname__
         if self.filename is not None:
             title = "{} - {}*".format(title, self.filename)
@@ -1170,6 +1173,10 @@ class MainWindow(QtWidgets.QMainWindow):
             flags = shape["flags"]
             group_id = shape["group_id"]
             other_data = shape["other_data"]
+
+            if not points:
+                # skip point-empty shape
+                continue
 
             shape = Shape(
                 label=label,
@@ -1538,6 +1545,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.paintCanvas()
         self.addRecentFile(self.filename)
         self.toggleActions(True)
+        self.canvas.setFocus()
         self.status(self.tr("Loaded %s") % osp.basename(str(filename)))
         return True
 
@@ -1870,6 +1878,16 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def toggleKeepPrevMode(self):
         self._config["keep_prev"] = not self._config["keep_prev"]
+
+    def removeSelectedPoint(self):
+        self.canvas.removeSelectedPoint()
+        if not self.canvas.hShape.points:
+            self.canvas.deleteShape(self.canvas.hShape)
+            self.remLabels([self.canvas.hShape])
+            self.setDirty()
+            if self.noShapes():
+                for action in self.actions.onShapesPresent:
+                    action.setEnabled(False)
 
     def deleteSelectedShape(self):
         yes, no = QtWidgets.QMessageBox.Yes, QtWidgets.QMessageBox.No
